@@ -13,7 +13,7 @@ app.register_blueprint(apibp)
 
 @app.route('/')
 def index():
-    print(app.config['DEBUG'])
+    print("Hello",app.config['DEBUG'])
     return "hello"
 
 if __name__=="__main__":
