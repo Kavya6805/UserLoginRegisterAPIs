@@ -2,7 +2,7 @@ from api.models.userListModel import UserList
 from common.common import apiResponse
 from common.common import auth
 
-@auth
+# @auth
 def userlist():
     try:
         userlist=UserList()

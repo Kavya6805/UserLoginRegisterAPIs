@@ -1,6 +1,9 @@
 from flask import Response,json,request
 from functools import wraps
 from flask import session 
+import base64
+from datetime import datetime
+
 
 def apiResponse(status=True,message="",data=None,http_status=200):
     response={
@@ -25,3 +28,14 @@ def auth(func):
         else:
             return func(*args,**kwargs)
     return decorated
+
+def generate_encrypted_string():
+    current_time=str(datetime.now())
+    current_time_bytes = current_time.encode("ascii")
+    base64_bytes = base64.b64encode(current_time_bytes)
+    base64_string = base64_bytes.decode("ascii")
+    print(base64_bytes)
+    print(base64_string)
+    return base64_string
+generate_encrypted_string()
+

@@ -13,23 +13,23 @@ class Login:
             session["logged_in"] = True
             token = jwt.encode(payload={
                 'email': email,
-                'expiration': str(datetime.utcnow()+timedelta(seconds=120))
+                'expiration': str(datetime.now()+timedelta(seconds=120))
             },
                 key=app.config['SECRET_KEY'], algorithm='HS256')
             print(token)
             session['token'] = token
             return token
         elif self.authenticate(email, password) == 1:
-            return "Wrong Password!!"
+            return 1
         else:
-            return "User Not Exist!!"
+            return -1
 
     def authenticate(self, email, password):
         """Numbering for return statement
 
-        0: user exist
+        0: user credential fullfilled
         1: password wrong
-        2: user doesn't exist
+        -1: user doesn't exist
         """
         queryforuserexist = text("SELECT * FROM USERLOGINREGISTER WHERE email=:email")
         queryforuserexistresult = db.session.execute(queryforuserexist.params(email=email))
@@ -43,5 +43,5 @@ class Login:
             else:
                 return 1
         else:
-            return 2
+            return -1
 

@@ -11,13 +11,13 @@ def login():
 
     print(re.search(emailregex,email))
     if re.search(emailregex,email):  
-        if len(password)<8 | len(password)>12:
+        if len(password)>=8 | len(password)<=12:
             login = Login()
             data = login.login(email, password)
-            if data == "Wrong Password!!":
-                return apiResponse(False, data, "")
-            elif data == "User Not Exist!!":
-                return apiResponse(False, data, "")
+            if data == 1:
+                return apiResponse(False, "Wrong Password!!", "")
+            elif data == -1:
+                return apiResponse(False, "User Not Exist!!", "")
             else:
                 return apiResponse(True, "User Authenticated Successfully", data)
         else:
