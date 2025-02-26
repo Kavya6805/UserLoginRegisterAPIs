@@ -8,42 +8,40 @@ from functools import wraps
 
 
 class Login:
-    def login(self, username, password):
-        if self.authenticate(username, password) == 0:
+    def login(self, email, password):
+        if self.authenticate(email, password) == 0:
             session["logged_in"] = True
             token = jwt.encode(payload={
-                'username': username,
-                'expiration': str(datetime.utcnow()+timedelta(seconds=120))
+                'email': email,
+                'expiration': str(datetime.now()+timedelta(seconds=120))
             },
                 key=app.config['SECRET_KEY'], algorithm='HS256')
             print(token)
             session['token'] = token
             return token
-        elif self.authenticate(username, password) == 1:
-            return "Wrong Password!!"
+        elif self.authenticate(email, password) == 1:
+            return 1
         else:
-            return "User Not Exist!!"
+            return -1
 
-    def authenticate(self, username, password):
-        sql1 = text("SELECT * FROM USERLOGINREGISTER WHERE username=:username")
-        result1 = db.session.execute(sql1.params(username=username))
-        if result1.fetchone():
-            sql2 = text(
-                "SELECT password FROM USERLOGINREGISTER WHERE username=:username and password=:password")
-            result2 = db.session.execute(
-                sql2, {'username': username, 'password': password})
-            if result2.fetchone():
+    def authenticate(self, email, password):
+        """Numbering for return statement
+
+        0: user credential fullfilled
+        1: password wrong
+        -1: user doesn't exist
+        """
+        queryforuserexist = text("SELECT * FROM USERLOGINREGISTER WHERE email=:email")
+        queryforuserexistresult = db.session.execute(queryforuserexist.params(email=email))
+        if queryforuserexistresult.fetchone():
+            queryforuserpassword = text(
+                "SELECT password FROM USERLOGINREGISTER WHERE email=:email and password=:password")
+            queryforuserpasswordresult = db.session.execute(
+                queryforuserpassword, {'email': email, 'password': password})
+            if queryforuserpasswordresult.fetchone():
                 return 0
             else:
                 return 1
         else:
-            return 2
+            return -1
 
-    def auth(self, func):
-        @wraps(func)
-        def decorated(*args, **kwargs):
-            token = session['token']
-            if not token:
-                pass
-            else:
-                pass
