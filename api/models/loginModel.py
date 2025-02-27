@@ -5,7 +5,7 @@ import jwt
 from datetime import timedelta, datetime
 from app import app
 from functools import wraps
-
+from common.common import checkPasswordCredentials
 
 class Login:
     def login(self, email, password):
@@ -34,10 +34,11 @@ class Login:
         queryforuserexist = text("SELECT * FROM USERLOGINREGISTER WHERE email=:email")
         queryforuserexistresult = db.session.execute(queryforuserexist.params(email=email))
         if queryforuserexistresult.fetchone():
+            hashedpassword=checkPasswordCredentials(password)
             queryforuserpassword = text(
                 "SELECT password FROM USERLOGINREGISTER WHERE email=:email and password=:password")
             queryforuserpasswordresult = db.session.execute(
-                queryforuserpassword, {'email': email, 'password': password})
+                queryforuserpassword, {'email': email, 'password': hashedpassword})
             if queryforuserpasswordresult.fetchone():
                 return 1
             else:

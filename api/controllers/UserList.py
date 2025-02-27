@@ -8,6 +8,8 @@ def userlist():
         userlist=UserList()
         data=userlist.userlist()
         data=[dict(row) for row in data]
-        return apiResponse(True,"Users Found!!",data)
+        if data:
+            return apiResponse(True,"Users Found!!",data)
+        return apiResponse(False,"Users Not Found!!")
     except:
         return apiResponse(False,"Something Went Wrong!!",None)

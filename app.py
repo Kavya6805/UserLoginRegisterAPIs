@@ -30,7 +30,7 @@ app.config['MAIL_USE_SSL']=False
 @app.route('/')
 def index():
     print("Hello",app.config['DEBUG'])
-    checkPasswordCredentials("Kavya@123")
+    # checkPasswordCredentials("Kavya@123")
     return "hello"
 
 @app.route('/reset-password/<reset_token>')
