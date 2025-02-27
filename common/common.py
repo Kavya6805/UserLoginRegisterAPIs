@@ -3,6 +3,8 @@ from functools import wraps
 from flask import session 
 import base64
 from datetime import datetime
+import re
+
 
 
 def apiResponse(status=True,message="",data=None,http_status=200):
@@ -39,3 +41,15 @@ def generate_encrypted_string():
     return base64_string
 generate_encrypted_string()
 
+
+def checkPasswordCredentials(password):
+    upperregex = r"[A-Z]+"
+    lowerregex = r"[a-z]+"
+    digitregex = r"[0-9]+"
+    specialregex = r"[@#!$%^&*()-+]+"
+    if len(password) < 8 or len(password) > 12:
+        return 0
+    elif not (re.search(upperregex, password) and re.search(lowerregex, password) and re.search(digitregex, password) and re.search(specialregex, password)):
+        return -1
+    else:
+        return 1

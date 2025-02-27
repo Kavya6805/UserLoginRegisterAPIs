@@ -1,6 +1,6 @@
 from sqlalchemy import text
 from database import db
-from common.common import generate_encrypted_string
+from common.common import generate_encrypted_string,checkPasswordCredentials
 
 class ForgetPassword:
     def forgetpassword(self,email):
@@ -26,9 +26,14 @@ class ForgetPassword:
     
     def resetpassword(self,updatedpassword,reset_token):
         try:
-            sql=text("UPDATE USERLOGINREGISTER SET password=:password,reset_token=NULL WHERE reset_token=:reset_token")
-            db.session.execute(sql.params(reset_token=reset_token,password=updatedpassword))
-            db.session.commit()
-            return 1
+            if checkPasswordCredentials(updatedpassword)==0:
+                return {"message": "Password must be between 8 to 12 characters"}
+            elif checkPasswordCredentials(updatedpassword)==-1:
+                return {"message": "Password must contain minimum 1 Upper, 1 small,1 special charatcter and 1 digit"}
+            else:
+                sql=text("UPDATE USERLOGINREGISTER SET password=:password,reset_token=NULL WHERE reset_token=:reset_token")
+                db.session.execute(sql.params(reset_token=reset_token,password=updatedpassword))
+                db.session.commit()
+                return 1
         except:
             return -1

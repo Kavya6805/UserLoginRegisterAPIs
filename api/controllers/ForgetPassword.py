@@ -27,8 +27,11 @@ def resetpassword(reset_token):
     updatedpassword=request.form['password']
     print("password-------------",updatedpassword)
     data=forgetpassword.resetpassword(updatedpassword,reset_token)
-    if data==1:
-        return apiResponse(True,"Password Updated Successfully")
+    if data:
+        try:
+            return apiResponse(True,data["message"])
+        except:
+            return apiResponse(True,"Password Updated Successfully")
     else:
         return apiResponse(False,"Something went wrong!! please try again!!")
 
