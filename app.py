@@ -5,6 +5,8 @@ from flask_mail import Mail
 import os
 from dotenv import load_dotenv
 import requests
+from flask_bcrypt import Bcrypt
+from common.common import checkPasswordCredentials
 
 app=Flask(__name__)
 app.config.from_object(DevelopmentConfig)
@@ -28,6 +30,7 @@ app.config['MAIL_USE_SSL']=False
 @app.route('/')
 def index():
     print("Hello",app.config['DEBUG'])
+    checkPasswordCredentials("Kavya@123")
     return "hello"
 
 @app.route('/reset-password/<reset_token>')

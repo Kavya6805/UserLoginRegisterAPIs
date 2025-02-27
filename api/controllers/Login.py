@@ -13,7 +13,7 @@ def login():
     if re.search(emailregex,email):  
         login = Login()
         data = login.login(email, password)
-        if data == 1:
+        if data == 0:
             return apiResponse(False, "Wrong Password!!", "")
         elif data == -1:
             return apiResponse(False, "User Not Exist!!", "")

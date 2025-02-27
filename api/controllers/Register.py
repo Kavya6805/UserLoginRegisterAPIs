@@ -11,15 +11,14 @@ def register():
     role = request.form['role']
     password = request.form['password']
     register = Register()
- 
-    if len(password) >= 8 and len(password) <= 12:
-        data = register.register(username, email, phone, role, password)
-        print(data)
-        if data:
-            try:
-                return apiResponse(True, data["message"], None)
-            except:
-                message = "User Created Successfully"
-                return apiResponse(True,message)
-        message = "User With This Email Already Exists!!"
-        return apiResponse(False, message, None)
+
+    data = register.register(username, email, phone, role, password)
+    print(data)
+    if data:
+        try:
+            return apiResponse(True, data["message"], None)
+        except:
+            message = "User Created Successfully"
+            return apiResponse(True,message)
+    message = "User With This Email Already Exists!!"
+    return apiResponse(False, message, None)

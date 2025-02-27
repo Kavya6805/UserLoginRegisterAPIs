@@ -9,7 +9,7 @@ from functools import wraps
 
 class Login:
     def login(self, email, password):
-        if self.authenticate(email, password) == 0:
+        if self.authenticate(email, password) == 1:
             session["logged_in"] = True
             token = jwt.encode(payload={
                 'email': email,
@@ -19,16 +19,16 @@ class Login:
             print(token)
             session['token'] = token
             return token
-        elif self.authenticate(email, password) == 1:
-            return 1
+        elif self.authenticate(email, password) == 0:
+            return 0
         else:
             return -1
 
     def authenticate(self, email, password):
         """Numbering for return statement
 
-        0: user credential fullfilled
-        1: password wrong
+        0: password wrong
+        1: user credential fullfilled
         -1: user doesn't exist
         """
         queryforuserexist = text("SELECT * FROM USERLOGINREGISTER WHERE email=:email")
@@ -39,9 +39,9 @@ class Login:
             queryforuserpasswordresult = db.session.execute(
                 queryforuserpassword, {'email': email, 'password': password})
             if queryforuserpasswordresult.fetchone():
-                return 0
-            else:
                 return 1
+            else:
+                return 0
         else:
             return -1
 

@@ -12,9 +12,8 @@ class Register:
                 return {"message": "Password must be between 8 to 12 characters"}
             elif checkPasswordCredentials(password)==-1:
                 return {"message": "Password must contain minimum 1 Upper, 1 small,1 special charatcter and 1 digit"}
-            else:
-                db.session.commit()
-                return 1
+            db.session.commit()
+            return 1
         except:
             return 0
         

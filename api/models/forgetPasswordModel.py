@@ -31,8 +31,9 @@ class ForgetPassword:
             elif checkPasswordCredentials(updatedpassword)==-1:
                 return {"message": "Password must contain minimum 1 Upper, 1 small,1 special charatcter and 1 digit"}
             else:
+                hashed_password=checkPasswordCredentials(updatedpassword)
                 sql=text("UPDATE USERLOGINREGISTER SET password=:password,reset_token=NULL WHERE reset_token=:reset_token")
-                db.session.execute(sql.params(reset_token=reset_token,password=updatedpassword))
+                db.session.execute(sql.params(reset_token=reset_token,password=hashed_password))
                 db.session.commit()
                 return 1
         except:

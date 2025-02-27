@@ -4,6 +4,8 @@ from flask import session
 import base64
 from datetime import datetime
 import re
+# from app import bcrypt
+import hashlib
 
 
 
@@ -52,4 +54,6 @@ def checkPasswordCredentials(password):
     elif not (re.search(upperregex, password) and re.search(lowerregex, password) and re.search(digitregex, password) and re.search(specialregex, password)):
         return -1
     else:
-        return 1
+        hashed_password=hashlib.md5(password.encode())
+        print(hashed_password.hexdigest())
+        return hashed_password.hexdigest()

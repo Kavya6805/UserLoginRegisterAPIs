@@ -1,4 +1,4 @@
-from flask import request
+from flask import request,redirect
 from api.models.forgetPasswordModel import ForgetPassword
 from common.common import apiResponse
 from flask_mail import Message,Mail
@@ -15,7 +15,7 @@ def forgetpassword():
             subject="Reset Password For Flask Application",
             sender="abcx40787@gmail.com",
             recipients=[email],
-            body=f"Hey, Your Reset-Password Link is here <br> Click Link <br> {reset_link}"
+            html=f"<h3>Hey {email},</h3> <h4>Your Reset-Password Link is here <a href={reset_link}>Click Link </a> </h4>"
         )
         mail.send(message)
         return apiResponse(True,"Mail sent to your email successfully")
@@ -29,8 +29,9 @@ def resetpassword(reset_token):
     data=forgetpassword.resetpassword(updatedpassword,reset_token)
     if data:
         try:
-            return apiResponse(True,data["message"])
+            return apiResponse(False,data["message"])
         except:
+            redirect("/")
             return apiResponse(True,"Password Updated Successfully")
     else:
         return apiResponse(False,"Something went wrong!! please try again!!")
